@@ -17,7 +17,8 @@ public class fileExam02 {
 		String data = "우리 열심히해서 빨리 밥 먹으로 가요";
 		byte b[] = data.getBytes();
 		f.write(b);
-		f.write(65);
+		f.write(b);
+		System.out.println(data);
 		
 		}catch(Exception e) {
 			System.out.println(e + " == 파일쓰기 실패");
