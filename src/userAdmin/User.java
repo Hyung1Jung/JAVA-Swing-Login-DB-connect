@@ -37,7 +37,7 @@ public class User {
 		mb2.setUn(n++);
 		mb.add(mb2);
 		Db();
-
+		
 	}
 
 	void Db() { // 데이터베이스화
