@@ -1,12 +1,13 @@
 package userAdmin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.awt.Desktop;
 import java.io.*;
 
 public class User {
-
+	String s;
 	int in = 0;
 	int n = 0;
 
@@ -19,14 +20,8 @@ public class User {
 		int n = 1;
 		MemberShip mb2 = new MemberShip();
 		System.out.print("아이디를 입력하세요 : "); // 아이디
-		String s = sc.next();
-		for (int i = 0; i < mb.size(); i++) {
-			if (mb.get(i).getId().equals(s)) {
-				System.out.println("중복된 아이디 입력");
-				System.out.print("아이디를 입력하세요 : ");
-				s = sc.next();
-			}
-		}
+		s = sc.next();
+		jungbok();
 		mb2.setId(s);
 		System.out.print("비밀번호를 입력하세요 : "); // 비밀번호
 		mb2.setPw(sc.nextInt());
@@ -47,25 +42,21 @@ public class User {
 
 	void Db() { // 데이터베이스화
 		FileOutputStream f = null;
-		FileOutputStream f2 = null;
+
 		try {
 			n++;
 			String data = "";
 			f = new FileOutputStream("D:\\Junghyungil\\Test\\allData.txt", true);
-			f2 = new FileOutputStream("D:\\Junghyungil\\Test\\soloData\\" + mb.get(in).getId() + ".txt");
-			data = "회원아이디 : " + mb.get(in).getId() + " 이름 : " + mb.get(in).getName() + " 회원번호 : "
-					+ (mb.get(in).getUn() + n) + " 성별 : " + mb.get(in).getSe() + " 휴대폰 번호 : " + mb.get(in).getPh()
+			data = "회원아이디 : " + mb.get(in).getId() + " 이름 : " + mb.get(in).getName() + "  회원번호 : "
+					+ (mb.get(in).getUn() + n) + "  성별 : " + mb.get(in).getSe() + "  휴대폰 번호 : " + mb.get(in).getPh()
 					+ "\n";
-
 			in++;
 			f.write(data.getBytes());
-			f2.write(data.getBytes());
 		} catch (Exception e) {
 			System.out.println(e + " == 파일쓰기 실패");
 		} finally {
 			try {
 				f.close();
-				f2.close();
 			} catch (Exception e) {
 				System.out.println(e + " == close 실패");
 			}
@@ -81,64 +72,70 @@ public class User {
 			e.printStackTrace();
 		}
 	}
-
-	// 검색2 - 종료 전에는 검색이 가능하고 종료해도 회원들 데이터는 계속 남아있지만 종료하면 arraylist가 초기화되서 다시 재실행할때는
-	// 검색할때 찾지를 못한다
-	void Out2() {
-		String data = "";
-		System.out.print("검색할 회원의 이름을 입력하시오 : ");
-		String s = sc.next();
-		for (int i = 0; i < mb.size(); i++) {
-			if (s.equals(mb.get(i).getId())) {
-				data = "회원아이디 : " + mb.get(i).getId() + " 이름 : " + mb.get(i).getName() + " 회원번호 : " + mb.get(i).getUn()
-						+ n + " 성별 : " + mb.get(i).getSe() + " 휴대폰 번호 : " + mb.get(i).getPh() + "\n";
-			}
-		}
-		FileOutputStream f = null;
+	// 중복을 확인하기 위한 메소드
+	void jungbok() {
+		FileReader fr = null;
+		BufferedReader br = null;
+		String data;
+		File f = new File("D:\\Junghyungil\\Test\\allData.txt");
 		try {
-			f = new FileOutputStream("D:\\Junghyungil\\Test\\searchData2.txt");
-			f.write(data.getBytes());
-			Desktop.getDesktop().open(new File("D:\\Junghyungil\\Test\\searchData2.txt"));
+			fr = new FileReader(f);
+			br = new BufferedReader(fr);
+			while ((data = br.readLine()) != null) {
+				while(!s.contains(data)) {
+					System.out.println("중복된 아이디 입니다.");
+					System.out.println("아이디를 입력하세요 : ");
+					s = sc.next();
+					break;
+			
+				}
+			}
 		} catch (Exception e) {
-			System.out.println("검색 실패");
+			System.out.println(e);
 		} finally {
 			try {
-				f.close();
+				fr.close();
+				br.close();
 			} catch (Exception e) {
 			}
 		}
 	}
 
-	//
-	void Out() { 
-		String data = "";
-
-		System.out.println("검색할 회원의 이름을 입력하시오 : ");
+	void Out3() {
+		Scanner sc = new Scanner(System.in);
+		System.out.print("검색할 이름 입력 : ");
 		String s = sc.next();
-
-		FileInputStream f_read = null;
 		FileOutputStream f_write = null;
+		FileReader fr = null;
+		BufferedReader br = null;
+		String data = null;
+
+		File f = new File("D:\\Junghyungil\\Test\\allData.txt");
 		try {
-			f_read = new FileInputStream("D:\\Junghyungil\\Test\\soloData\\" + s + ".txt");
 			f_write = new FileOutputStream("D:\\Junghyungil\\Test\\searchData.txt");
-			byte[] b = new byte[f_read.available()];
-			while (f_read.read(b) != -1) {
+			fr = new FileReader(f);
+			br = new BufferedReader(fr);
+			while ((data = br.readLine()) != null) {
+				if (data.contains(s)) {
+					f_write.write(data.getBytes());
+					Desktop.getDesktop().open(new File("D:\\Junghyungil\\Test\\searchData.txt"));
+				}
 			}
-			f_write.write(b);
-			Desktop.getDesktop().open(new File("D:\\Junghyungil\\Test\\searchData.txt"));
 		} catch (Exception e) {
-			System.out.println(s + "라는 Id를 가진 회원은 없습니다.");
+			System.out.println(e);
 		} finally {
 			try {
-				f_read.close();
-				f_write.close();
+				fr.close();
+				br.close();
 			} catch (Exception e) {
 			}
 		}
+
 	}
 
 	// 메뉴를 위한 메소드
 	void menu() {
+		System.out.println("회원가입 프로그램");
 		int menu = 0;
 		do {
 			System.out.println("1:회원 가입    2:검색출력     3:전체출력     4:종료 ");
@@ -149,7 +146,7 @@ public class User {
 				put();
 				break;
 			case 2:
-				Out();
+				Out3();
 				break;
 			case 3:
 				print();

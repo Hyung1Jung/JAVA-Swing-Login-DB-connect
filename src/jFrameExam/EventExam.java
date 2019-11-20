@@ -1,5 +1,6 @@
 package jFrameExam;
 
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,7 +15,7 @@ public class EventExam implements ActionListener {
 	public EventExam() {
 		f.add(btn1);
 		f.add(btn2);
-
+		f.setLayout(new FlowLayout());
 		f.setSize(400, 300);
 		f.setVisible(true);
 		f.setDefaultCloseOperation(f.EXIT_ON_CLOSE);
@@ -33,4 +34,4 @@ public class EventExam implements ActionListener {
 			System.out.println("Hello");
 		}
 	}
-}
+}0.
