@@ -1,4 +1,4 @@
-package dbExam01;
+package dbExam;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,20 +19,31 @@ public class DbExam01 {
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URl, USER_NAME, PASSWORD);
-			if(conn == null)
-				System.out.println("d");
-			state = conn.createStatement();
+
+			state = conn.createStatement(); // state 연결
 			String s = "select * from userpro;";
+			//ResultSet aa = state.executeQuery(s);
+			//"insert into userpro value('hyungil', 'Junghyungil', 1 , 'm', 01088658860, 1234, 941010);";
+			//state.executeUpdate(s); // 테이블에 값 넣기
 			ResultSet aa = state.executeQuery(s);
+			
 			
 			if(aa.next()) {
 				String s1 = aa.getString("id");
 				String s2 = aa.getString("name");
 				int n1 = aa.getInt("no");
+				String s3 = aa.getString("sex");
+				int n2 = aa.getInt("ph");
+				int n3 = aa.getInt("pw");
+				int n4 = aa.getInt("jumin");
 				
 				System.out.println(s1);
 				System.out.println(s2);
 				System.out.println(n1);
+				System.out.println(s3);
+				System.out.println(n2);
+				System.out.println(n3);
+				System.out.println(n4);
 			}
 
 			aa.close();

@@ -5,11 +5,23 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.awt.Desktop;
 import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class User {
-	String s;
+	String arr[] = new String[1];
+	//arr[0] = "";
 	int in = 0;
 	int n = 0;
+	
+	private final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+	private final String DB_URl = "jdbc:mysql://localhost/db01"; // ?? 데이터베이스 이름, cmd에서 use 데이터베이스명 하고 같음
+
+	private final String USER_NAME = "root";
+	private final String PASSWORD = "a88658860@";
 
 	ArrayList<MemberShip> mb = new ArrayList<MemberShip>();
 
@@ -20,9 +32,9 @@ public class User {
 		int n = 1;
 		MemberShip mb2 = new MemberShip();
 		System.out.print("아이디를 입력하세요 : "); // 아이디
-		s = sc.next();
-		jungbok();
-		mb2.setId(s);
+		arr[0] = sc.next();
+		Jungbok();
+		mb2.setId(arr[0]);
 		System.out.print("비밀번호를 입력하세요 : "); // 비밀번호
 		mb2.setPw(sc.nextInt());
 		System.out.print("이름을 입력하세요 : "); // 이름
@@ -41,96 +53,196 @@ public class User {
 	}
 
 	void Db() { // 데이터베이스화
-		FileOutputStream f = null;
+		Connection conn = null;
+		Statement state = null;
+		String n1 = mb.get(in).getId();
+		String n2 = mb.get(in).getName();
+		int n3 = (mb.get(in).getUn() + n);
+		String n4 = mb.get(in).getSe();
+		int n5 = mb.get(in).getPh();
+		int n6 = mb.get(in).getPw();
+		int n7 = mb.get(in).getJumin();
+		Scanner sc = new Scanner(System.in);
 
 		try {
-			n++;
-			String data = "";
-			f = new FileOutputStream("D:\\Junghyungil\\Test\\allData.txt", true);
-			data = "회원아이디 : " + mb.get(in).getId() + " 이름 : " + mb.get(in).getName() + "  회원번호 : "
-					+ (mb.get(in).getUn() + n) + "  성별 : " + mb.get(in).getSe() + "  휴대폰 번호 : " + mb.get(in).getPh()
-					+ "\n";
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URl, USER_NAME, PASSWORD);
+
+			state = conn.createStatement(); // state 연결
+			String input = String.format("Insert into userpro value('%s','%s','%d','%s','%d','%d','%d')", n1, n2, n3,
+					n4, n5, n6, n7);
 			in++;
-			f.write(data.getBytes());
+			state.executeUpdate(input); // 테이블에 값 넣기
+			state.close();
 		} catch (Exception e) {
-			System.out.println(e + " == 파일쓰기 실패");
 		} finally {
 			try {
-				f.close();
-			} catch (Exception e) {
-				System.out.println(e + " == close 실패");
+				if (conn != null)
+					conn.close();
+			} catch (SQLException ex1) {
 			}
 		}
+		
 	}
+	
 
 	// 전체출력
 	void print() {
+		Connection conn = null;
+		Statement state = null;
 		try {
-			Desktop.getDesktop().open(new File("D:\\Junghyungil\\Test\\allData.txt"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URl, USER_NAME, PASSWORD);
+
+			state = conn.createStatement(); // state 연결
+			String s = "select * from userpro;"; // 출력 테이블 대입
+			ResultSet aa = state.executeQuery(s);
+
+			while (aa.next()) {
+				String s1 = aa.getString("id");
+				String s2 = aa.getString("name");
+				int n1 = aa.getInt("no");
+				String s3 = aa.getString("sex");
+				int n2 = aa.getInt("ph");
+				int n3 = aa.getInt("pw");
+				int n4 = aa.getInt("jumin");
+
+				System.out.print("|" + "Id : " + s1 + " |");
+				System.out.print("name : " + s2 + " |");
+				System.out.print("no : " + n1 + " |");
+				System.out.print("sex : " + s3 + " |");
+				System.out.print("ph : " + n2 + " |");
+				System.out.print("pw : " + n3 + " |");
+				System.out.println("Jumin : " + n4 + "|");
+			}
+
+			aa.close();
+			state.close();
+		} catch (Exception e) {
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException ex1) {
+			}
 		}
 	}
+
 	// 중복을 확인하기 위한 메소드
-	void jungbok() {
-		FileReader fr = null;
-		BufferedReader br = null;
-		String data;
-		File f = new File("D:\\Junghyungil\\Test\\allData.txt");
+	void Jungbok() {
+		
+		Connection conn = null;
+		Statement state = null;
+
 		try {
-			fr = new FileReader(f);
-			br = new BufferedReader(fr);
-			while ((data = br.readLine()) != null) {
-				while(!s.contains(data)) {
-					System.out.println("중복된 아이디 입니다.");
-					System.out.println("아이디를 입력하세요 : ");
-					s = sc.next();
-					break;
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URl, USER_NAME, PASSWORD);
+
+			state = conn.createStatement(); // state 연결
+			String s = String.format("select id from userpro where id = '%s';",arr[0]); // 출력 테이블 대입
+			ResultSet aa = state.executeQuery(s);
+	
 			
+			while(aa.next()) {
+				//String z = aa.getString("id");
+				System.out.println("중복");
+				System.out.println("다시입력 : ");
+				arr[0] = sc.next();
+				break;
 				}
-			}
+			
+	
+			
+
+				
+			aa.close();
+			state.close();
 		} catch (Exception e) {
-			System.out.println(e);
 		} finally {
 			try {
-				fr.close();
-				br.close();
-			} catch (Exception e) {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException ex1) {
+			}
+		}
+
+	}
+
+	// 검색
+	void Out3() {
+		Connection conn = null;
+		Statement state = null;
+
+		Scanner sc = new Scanner(System.in);
+		System.out.println("검색할 Id를 입력 : ");
+		String s = sc.next();
+
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URl, USER_NAME, PASSWORD);
+
+			state = conn.createStatement(); // state 연결
+			String input = String.format("select * from userpro where id = '%s';", s); // 출력 테이블 대입
+			ResultSet aa = state.executeQuery(input);
+
+			if (aa.next()) {
+				String s1 = aa.getString("id");
+				String s2 = aa.getString("name");
+				int n1 = aa.getInt("no");
+				String s3 = aa.getString("sex");
+				int n2 = aa.getInt("ph");
+				int n3 = aa.getInt("pw");
+				int n4 = aa.getInt("jumin");
+
+				System.out.print("|" + "Id : " + s1 + " |");
+				System.out.print("name : " + s2 + " |");
+				System.out.print("no : " + n1 + " |");
+				System.out.print("sex : " + s3 + " |");
+				System.out.print("ph : " + n2 + " |");
+				System.out.print("pw : " + n3 + " |");
+				System.out.println("Jumin : " + n4 + "|");
+			}
+
+			aa.close();
+			state.close();
+		} catch (Exception e) {
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException ex1) {
 			}
 		}
 	}
 
-	void Out3() {
-		Scanner sc = new Scanner(System.in);
-		System.out.print("검색할 이름 입력 : ");
-		String s = sc.next();
-		FileOutputStream f_write = null;
-		FileReader fr = null;
-		BufferedReader br = null;
-		String data = null;
+	//회원삭제
+	void remove() {
+		Connection conn = null;
+		Statement state = null;
 
-		File f = new File("D:\\Junghyungil\\Test\\allData.txt");
+		Scanner sc = new Scanner(System.in);
+		System.out.println("삭제할 Id를 입력 : ");
+		String s = sc.next();
+
 		try {
-			f_write = new FileOutputStream("D:\\Junghyungil\\Test\\searchData.txt");
-			fr = new FileReader(f);
-			br = new BufferedReader(fr);
-			while ((data = br.readLine()) != null) {
-				if (data.contains(s)) {
-					f_write.write(data.getBytes());
-					Desktop.getDesktop().open(new File("D:\\Junghyungil\\Test\\searchData.txt"));
-				}
-			}
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URl, USER_NAME, PASSWORD);
+
+			state = conn.createStatement(); // state 연결
+			String input = String.format("delete from userpro where id = '%s';", s); // 출력 테이블 대입
+			System.out.println("해당되는 회원정보가 삭제되었습니다.");
+			
+			state.executeUpdate(input);
+
+			state.close();
 		} catch (Exception e) {
-			System.out.println(e);
 		} finally {
 			try {
-				fr.close();
-				br.close();
-			} catch (Exception e) {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException ex1) {
 			}
 		}
-
 	}
 
 	// 메뉴를 위한 메소드
@@ -138,7 +250,7 @@ public class User {
 		System.out.println("회원가입 프로그램");
 		int menu = 0;
 		do {
-			System.out.println("1:회원 가입    2:검색출력     3:전체출력     4:종료 ");
+			System.out.println("1:회원 가입    2:검색출력     3:전체출력     4:삭제    5: 종료 ");
 			System.out.print("번호 입력 : ");
 			menu = sc.nextInt();
 			switch (menu) {
@@ -152,12 +264,16 @@ public class User {
 				print();
 				break;
 			case 4:
+				remove();
+				break;
+			case 5:
 				System.out.print("종료");
 				return;
 			default:
 				System.out.println("메뉴 선택 오류");
 			}
-		} while (menu != 5);
+		} while (menu != 6);
 	}
+
 
 }

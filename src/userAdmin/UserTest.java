@@ -5,7 +5,7 @@ import java.io.*;
 class MemberShip {
 	// 변수 생성
 	String id, name, se; // 아이디, 이름 , 성별
-	int pw, jumin, ph, un; // 회원번호, 패스워드, 주민번호, 폰번호
+	int pw, jumin, ph, un; // 비밀번호, 주민번호, 폰번호, 회원번호
 
 	// getters and setters
 	public String getId() {
