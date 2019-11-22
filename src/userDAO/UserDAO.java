@@ -1,4 +1,4 @@
-package userAdmin;
+package userDAO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,12 +14,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class User {
+public class UserDAO {
 	String arr[] = new String[1];
 	int in = 0;
 	int n = 0;
 
-	ArrayList<MemberShip> a;
+	ArrayList<UserInfo> a;
 
 	private final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	private final String DB_URl = "jdbc:mysql://localhost/db01"; // ?? 데이터베이스 이름, cmd에서 use 데이터베이스명 하고 같음
@@ -85,8 +85,8 @@ public class User {
 		Db();
 	}
 
-	ArrayList<MemberShip> Db() { // 모델링한 객체의 값을 넣기위해 ArrayList 생성
-		ArrayList<MemberShip> bookVal = new ArrayList<MemberShip>();
+	ArrayList<UserInfo> Db() { // 모델링한 객체의 값을 넣기위해 ArrayList 생성
+		ArrayList<UserInfo> bookVal = new ArrayList<UserInfo>();
 		try {
 			DbConnect();
 			state = conn.createStatement(); // state 연결
@@ -96,7 +96,7 @@ public class User {
 			// state.executeUpdate(s); // 테이블에 값 넣기
 			ResultSet aa = state.executeQuery(s);
 			while (aa.next()) {
-				MemberShip m = new MemberShip(); // 모델링한 객체
+				UserInfo m = new UserInfo(); // 모델링한 객체
 				m.setId(aa.getString("id"));
 				m.setName(aa.getString("name"));
 				m.setUn(aa.getInt("no"));
@@ -155,20 +155,12 @@ public class User {
 
 	// 검색
 	/*
-	void Out() {
-		System.out.println("검색할 Id를 입력 : ");
-		String s = sc.next();
-		
-		for(MemberShip m : a) {
-			if(s.equals(m.getId())){
-				System.out.println();
-			}
-		}
-	}
-	*/
+	 * void Out() { System.out.println("검색할 Id를 입력 : "); String s = sc.next();
+	 * 
+	 * for(MemberShip m : a) { if(s.equals(m.getId())){ System.out.println(); } } }
+	 */
 	void Out3() {
 		DbConnect();
-
 
 		System.out.println("검색할 Id를 입력 : ");
 		String s = sc.next();
@@ -201,7 +193,7 @@ public class User {
 	// 전체 출력
 	void print() {
 		Db();
-		for (MemberShip s : a) {
+		for (UserInfo s : a) {
 			System.out.print("id : " + s.getId());
 			System.out.print("  name : " + s.getName());
 			System.out.print("  no : " + s.getUn());

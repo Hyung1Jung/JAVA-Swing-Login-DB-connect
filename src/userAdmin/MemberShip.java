@@ -2,7 +2,7 @@ package userAdmin;
 
 import java.io.*;
 
-class MemberShip {
+public class MemberShip {
 	// 변수 생성
 	String id, name, se; // 아이디, 이름 , 성별
 	int pw, jumin, ph, un; // 비밀번호, 주민번호, 폰번호, 회원번호
@@ -56,21 +56,12 @@ class MemberShip {
 		this.ph = ph;
 	}
 
+	public void setUn(int un) {
+		this.un = un;
+	}
+
 	public int getUn() {
 		return un;
 	}
 
-	public void setUn(int Un) {
-		this.un = un;
-	}
-
-}
-
-public class UserTest {
-	// 성적프로그램 실행을 위한 main
-	public static void main(String[] args) {
-		User u = new User();
-		u.menu();
-
-	}
 }

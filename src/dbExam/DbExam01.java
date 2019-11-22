@@ -16,8 +16,10 @@ public class DbExam01 {
 	public DbExam01() {
 		Connection conn = null;
 		Statement state = null;
+		
+	
 		try {
-			Class.forName(JDBC_DRIVER);
+			Class.forName(JDBC_DRIVER); //mysql에 연결
 			conn = DriverManager.getConnection(DB_URl, USER_NAME, PASSWORD);
 
 			state = conn.createStatement(); // state 연결
