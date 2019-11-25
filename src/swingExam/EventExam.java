@@ -27,11 +27,4 @@ public class EventExam implements ActionListener {
 		new EventExam();
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		String str = arg0.getActionCommand();
-		if (arg0.getSource() == btn1) {
-			System.out.println("Hello");
-		}
-	}
 }
