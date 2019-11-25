@@ -1,4 +1,4 @@
-package jFrameExam;
+package swingExam;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;

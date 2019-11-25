@@ -1,4 +1,4 @@
-package userDAO;
+package userMVC;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ public class UserDAO {
 	int in = 0;
 	int n = 0;
 
-	ArrayList<UserInfo> a;
+	ArrayList<UserDTO> a;
 
 	private final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	private final String DB_URl = "jdbc:mysql://localhost/db01"; // ?? 데이터베이스 이름, cmd에서 use 데이터베이스명 하고 같음
@@ -32,7 +32,7 @@ public class UserDAO {
 
 	Scanner sc = new Scanner(System.in);
 
-	void User() { // mysql연결 메소드 , 한 번만 쓰면 되니까 생성자와 동시에 초기화
+	void UserDAO() { // mysql연결 메소드 , 한 번만 쓰면 되니까 생성자와 동시에 초기화
 		try {
 			Class.forName(JDBC_DRIVER); // mysql에 연결, 외부에서 가져오는 것들은 모두 예외처리, 한 번만 쓰면 됨
 		} catch (Exception e) {
@@ -85,8 +85,8 @@ public class UserDAO {
 		Db();
 	}
 
-	ArrayList<UserInfo> Db() { // 모델링한 객체의 값을 넣기위해 ArrayList 생성
-		ArrayList<UserInfo> bookVal = new ArrayList<UserInfo>();
+	ArrayList<UserDTO> Db() { // 모델링한 객체의 값을 넣기위해 ArrayList 생성
+		ArrayList<UserDTO> bookVal = new ArrayList<UserDTO>();
 		try {
 			DbConnect();
 			state = conn.createStatement(); // state 연결
@@ -96,7 +96,7 @@ public class UserDAO {
 			// state.executeUpdate(s); // 테이블에 값 넣기
 			ResultSet aa = state.executeQuery(s);
 			while (aa.next()) {
-				UserInfo m = new UserInfo(); // 모델링한 객체
+				UserDTO m = new UserDTO(); // 모델링한 객체
 				m.setId(aa.getString("id"));
 				m.setName(aa.getString("name"));
 				m.setUn(aa.getInt("no"));
@@ -173,16 +173,14 @@ public class UserDAO {
 			ResultSet aa = state.executeQuery(input);
 
 			if (aa.next()) {
-				String s1 = aa.getString("id");
-				String s2 = aa.getString("name");
-				int n1 = aa.getInt("no");
-				String s3 = aa.getString("sex");
-				int n2 = aa.getInt("ph");
-				int n3 = aa.getInt("pw");
-				int n4 = aa.getInt("jumin");
-
+				System.out.println(aa.getString("id"));
+				System.out.println(aa.getString("name"));
+				System.out.println(aa.getInt("no"));
+				System.out.println(aa.getString("sex"));
+				System.out.println(aa.getInt("ph"));
+				System.out.println(aa.getInt("pw"));
+				System.out.println(aa.getInt("jumin"));
 			}
-
 			aa.close();
 		} catch (Exception e) {
 		} finally {
@@ -193,7 +191,7 @@ public class UserDAO {
 	// 전체 출력
 	void print() {
 		Db();
-		for (UserInfo s : a) {
+		for (UserDTO s : a) {
 			System.out.print("id : " + s.getId());
 			System.out.print("  name : " + s.getName());
 			System.out.print("  no : " + s.getUn());
@@ -201,7 +199,6 @@ public class UserDAO {
 			System.out.print("  ph : " + s.getPh());
 			System.out.print("  pw : " + s.getPw());
 			System.out.print("  jumin : " + s.getJumin());
-
 			System.out.println();
 		}
 	}

@@ -1,4 +1,4 @@
-package userDAO;
+package userMVC;
 
 import java.util.ArrayList;
 import java.util.Scanner;

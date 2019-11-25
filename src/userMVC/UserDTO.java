@@ -1,8 +1,8 @@
-package userDAO;
+package userMVC;
 
 import java.io.*;
 
-public class UserInfo {
+public class UserDTO {
 	// 변수 생성
 	String id, name, se; // 아이디, 이름 , 성별
 	int pw, jumin, ph, un; // 비밀번호, 주민번호, 폰번호, 회원번호
@@ -62,6 +62,11 @@ public class UserInfo {
 
 	public int getUn() {
 		return un;
+	}
+
+	 void setSex(String string) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
