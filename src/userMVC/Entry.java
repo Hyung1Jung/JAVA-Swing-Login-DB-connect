@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Entry extends JFrame implements ActionListener {
+	JPanel panel = new JPanel();
+	
 	JButton btn1 = new JButton("¿‘¿Â");
 	
 	public Entry() {

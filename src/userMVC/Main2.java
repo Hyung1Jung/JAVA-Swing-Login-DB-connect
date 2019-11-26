@@ -62,16 +62,25 @@ class Main2 extends JFrame implements ActionListener {
 				String pw = tf2.getText();
 				String s = u.Out4(id);
 				
+				
 				if (id.length() == 0 || pw.length() == 0) {
 					JOptionPane.showMessageDialog(null, "아이디 또는 비밀번호를 입력 하셔야 됩니다.", "아이디나 비번을 입력!",
 							JOptionPane.DEFAULT_OPTION);
 					return;
 				}
+				
+				
 				if (s.contains(id) && pw.equals(u.s2)) {
 					JOptionPane.showMessageDialog(null, "로그인 성공", "로그인 확인!", JOptionPane.DEFAULT_OPTION);
+					new Login();
 					return;
 				}
-				JOptionPane.showMessageDialog(null, "로그인 실패", "로그인 확인!", JOptionPane.DEFAULT_OPTION);
+				if (!(s.contains(id) && pw.equals(u.s2))) {
+					JOptionPane.showMessageDialog(null, "로그인 실패", "다시 입력!", JOptionPane.DEFAULT_OPTION);
+					return;
+				}
+			
+	
 			}
 
 		});

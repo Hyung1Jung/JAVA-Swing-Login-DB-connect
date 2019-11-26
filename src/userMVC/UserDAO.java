@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import dbExam.DbExam02Test;
@@ -20,6 +21,7 @@ public class UserDAO {
 	String arr[] = new String[1];
 	int in = 0;
 	int n = 0;
+	boolean b;
 
 	ArrayList<UserDTO> a;
 
@@ -29,6 +31,8 @@ public class UserDAO {
 	private final String USER_NAME = "root";
 	private final String PASSWORD = "a88658860@";
 
+	String s1;
+	String s2;
 	Connection conn = null;
 	Statement state = null;
 
@@ -69,7 +73,6 @@ public class UserDAO {
 		int n = 1;
 		System.out.print("아이디를 입력하세요 : "); // 아이디
 		arr[0] = sc.next();
-		Jungbok();
 		System.out.print("비밀번호를 입력하세요 : "); // 비밀번호
 		String n6 = sc.next();
 		System.out.println("번호를 입력하세요 : ");
@@ -118,7 +121,7 @@ public class UserDAO {
 		a = bookVal;
 		return bookVal;
 	}
-
+	
 	/*
 	 * void Insert(String n1, int n2, int n3, String n4, String n5, int n6, int n7)
 	 * { try { DbConnect(); state = conn.createStatement(); String input =
@@ -140,75 +143,34 @@ public class UserDAO {
 		}
 	}
 
-	/*
-	 * void Insert(String n1, String n2, int n3, String n4, int n5, int n6, int n7)
-	 * { try { DbConnect(); state = conn.createStatement(); String input =
-	 * String.format("Insert into userpro value('%s','%s','%d','%s','%d','%d','%d')"
-	 * , n1, n2, n3, n4, n5, n6, n7); state.executeUpdate(input); } catch (Exception
-	 * e) { } finally { Close(); } }
-	 */
 
-// 중복을 확인하기 위한 메소드
-	void Jungbok() {
+	int Jungbok(String s1) {
 		try {
 			DbConnect();
 			state = conn.createStatement(); // state 연결
-			String s = String.format("select id from userpro where id = '%s';", arr[0]); // 출력 테이블 대입
+			String s = String.format("select id from userpro where id = '%s';", s1); // 출력 테이블 대입
 			ResultSet aa = state.executeQuery(s);
-
-			while (aa.next()) {
-				// String z = aa.getString("id");
-				System.out.println("중복");
-				System.out.println("다시 입력 하세요 : ");
-				arr[0] = sc.next();
-				// break;
+			if(aa.next()) {
+				n = 1;
+			}else {
+				n = 0;
 			}
+				
 			aa.close();
 		} catch (Exception e) {
 		} finally {
 			Close();
 		}
-
+		return n;
 	}
-
-// 검색
+	// 검색
 	/*
 	 * void Out() { System.out.println("검색할 Id를 입력 : "); String s = sc.next();
 	 * 
 	 * for(MemberShip m : a) { if(s.equals(m.getId())){ System.out.println(); } } }
 	 */
-	
 
-	void Out3() {
-		System.out.println("검색할 Id를 입력 : ");
-		String s = sc.next();
 
-		try {
-			DbConnect();
-
-			state = conn.createStatement(); // state 연결
-			String input = String.format("select * from userpro where id = '%s';", s); // 출력 테이블 대입
-			ResultSet aa = state.executeQuery(input);
-			
-			if (aa.next()) {
-				System.out.println(aa.getString("id"));
-				System.out.println(aa.getString("name"));
-				System.out.println(aa.getInt("no"));
-				System.out.println(aa.getString("sex"));
-				System.out.println(aa.getInt("ph"));
-				System.out.println(aa.getInt("pw"));
-				System.out.println(aa.getInt("jumin"));
-				
-				s1 = aa.getString("id");
-			}
-			aa.close();
-		} catch (Exception e) {
-		} finally {
-			Close();
-		}
-	}
-	String s1;
-	String s2;
 	String Out4(String s) {
 		try {
 			DbConnect();
@@ -216,7 +178,7 @@ public class UserDAO {
 			state = conn.createStatement(); // state 연결
 			String input = String.format("select * from userpro where id = '%s';", s); // 출력 테이블 대입
 			ResultSet aa = state.executeQuery(input);
-			
+
 			if (aa.next()) {
 				s1 = aa.getString("id");
 				s2 = aa.getString("pw");
@@ -229,22 +191,8 @@ public class UserDAO {
 		return s1;
 	}
 
-// 전체 출력
-	void print() {
-		Db();
-		for (UserDTO s : a) {
-			System.out.print("id : " + s.getId());
-			System.out.print("  name : " + s.getName());
-			System.out.print("  no : " + s.getUn());
-			System.out.print("  sex : " + s.getSe());
-			System.out.print("  ph : " + s.getPh());
-			System.out.print("  pw : " + s.getPw());
-			System.out.print("  jumin : " + s.getJumin());
-			System.out.println();
-		}
-	}
 
-// 회원삭제
+	// 회원삭제
 	void remove() {
 
 		Scanner sc = new Scanner(System.in);
@@ -265,7 +213,7 @@ public class UserDAO {
 		}
 	}
 
-// 메뉴를 위한 메소드
+	// 메뉴를 위한 메소드
 	void menu() {
 		System.out.println("회원가입 프로그램");
 		int menu = 0;
@@ -278,10 +226,10 @@ public class UserDAO {
 				put();
 				break;
 			case 2:
-				Out3();
+				//Out3();
 				break;
 			case 3:
-				print();
+				//print();
 				break;
 			case 4:
 				remove();

@@ -8,13 +8,14 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 class Join extends JFrame implements ActionListener {
 	JButton btn1 = new JButton("가입");
 	UserDAO u = new UserDAO();
-	
+
 	public Join() {
 
 		JPanel panel = new JPanel();
@@ -36,8 +37,7 @@ class Join extends JFrame implements ActionListener {
 		JTextField juminTf = new JTextField(12);
 
 		panel.setLayout(null);
-		
-		
+
 		panel.add(id);
 		panel.add(idTf);
 		panel.add(pw);
@@ -53,23 +53,30 @@ class Join extends JFrame implements ActionListener {
 		panel.add(jumin);
 		panel.add(juminTf);
 		panel.add(btn1);
-		
+
 		String n1 = idTf.getText();
 		String n2 = pwTf.getText();
 		String n3 = unTf.getText();
 		String n4 = nameTf.getText();
 		String n5 = sexTf.getText();
 		String n6 = phTf.getText();
-		String n7 =juminTf.getText();
+		String n7 = juminTf.getText();
 
-		
+
 		btn1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				 u.Insert(idTf.getText(), pwTf.getText(), unTf.getText(), nameTf.getText(), sexTf.getText(), phTf.getText(), juminTf.getText());
-				new Success();
-			}
+				String id = idTf.getText();
+				int n = u.Jungbok(id);
+				
+				if(n == 1) {
+					JOptionPane.showMessageDialog(null, "중복된 아이디입니다", "가입실패.", JOptionPane.DEFAULT_OPTION);
+				}else {
+					new Success();
+					u.Insert(idTf.getText(), pwTf.getText(), unTf.getText(), nameTf.getText(), sexTf.getText(),
+							phTf.getText(), juminTf.getText());
+				}
+				}
 		});
-		
 
 		setVisible(true);
 
