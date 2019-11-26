@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import javax.swing.JTextField;
+
 import dbExam.DbExam02Test;
 
 import java.awt.Desktop;
@@ -69,17 +71,17 @@ public class UserDAO {
 		arr[0] = sc.next();
 		Jungbok();
 		System.out.print("비밀번호를 입력하세요 : "); // 비밀번호
-		int n6 = sc.nextInt();
+		String n6 = sc.next();
 		System.out.println("번호를 입력하세요 : ");
-		int n3 = sc.nextInt();
+		String n3 = sc.next();
 		System.out.print("이름을 입력하세요 : "); // 이름
 		String n2 = sc.next();
 		System.out.print("성별을 입력하세요(남/여) : "); // 성별
 		String n4 = sc.next();
 		System.out.print("휴대폰번호를 입력하세요 : "); // 휴대폰번호
-		int n5 = sc.nextInt();
+		String n5 = sc.next();
 		System.out.print("주민등록번호 앞자리를 입력하세요 : ");// 주민등록번호
-		int n7 = sc.nextInt();
+		String n7 = sc.next();
 		System.out.println("가입이 완료되었습니다!");
 		Insert(arr[0], n2, n3, n4, n5, n6, n7);
 		Db();
@@ -117,11 +119,19 @@ public class UserDAO {
 		return bookVal;
 	}
 
-	void Insert(String n1, String n2, int n3, String n4, int n5, int n6, int n7) {
+	/*
+	 * void Insert(String n1, int n2, int n3, String n4, String n5, int n6, int n7)
+	 * { try { DbConnect(); state = conn.createStatement(); String input =
+	 * String.format("Insert into userpro value('%s','%d','%d','%s','%s','%d','%d')"
+	 * , n1, n2, n3, n4, n5, n6, n7); state.executeUpdate(input); } catch (Exception
+	 * e) { } finally { Close(); } }
+	 */
+
+	void Insert(String n1, String n2, String n3, String n4, String n5, String n6, String n7) {
 		try {
 			DbConnect();
 			state = conn.createStatement();
-			String input = String.format("Insert into userpro value('%s','%s','%d','%s','%d','%d','%d')", n1, n2, n3,
+			String input = String.format("Insert into userpro value('%s','%s','%s','%s','%s','%s','%s')", n1, n2, n3,
 					n4, n5, n6, n7);
 			state.executeUpdate(input);
 		} catch (Exception e) {
@@ -130,7 +140,15 @@ public class UserDAO {
 		}
 	}
 
-	// 중복을 확인하기 위한 메소드
+	/*
+	 * void Insert(String n1, String n2, int n3, String n4, int n5, int n6, int n7)
+	 * { try { DbConnect(); state = conn.createStatement(); String input =
+	 * String.format("Insert into userpro value('%s','%s','%d','%s','%d','%d','%d')"
+	 * , n1, n2, n3, n4, n5, n6, n7); state.executeUpdate(input); } catch (Exception
+	 * e) { } finally { Close(); } }
+	 */
+
+// 중복을 확인하기 위한 메소드
 	void Jungbok() {
 		try {
 			DbConnect();
@@ -153,15 +171,15 @@ public class UserDAO {
 
 	}
 
-	// 검색
+// 검색
 	/*
 	 * void Out() { System.out.println("검색할 Id를 입력 : "); String s = sc.next();
 	 * 
 	 * for(MemberShip m : a) { if(s.equals(m.getId())){ System.out.println(); } } }
 	 */
-	void Out3() {
-		DbConnect();
+	
 
+	void Out3() {
 		System.out.println("검색할 Id를 입력 : ");
 		String s = sc.next();
 
@@ -171,7 +189,7 @@ public class UserDAO {
 			state = conn.createStatement(); // state 연결
 			String input = String.format("select * from userpro where id = '%s';", s); // 출력 테이블 대입
 			ResultSet aa = state.executeQuery(input);
-
+			
 			if (aa.next()) {
 				System.out.println(aa.getString("id"));
 				System.out.println(aa.getString("name"));
@@ -180,6 +198,8 @@ public class UserDAO {
 				System.out.println(aa.getInt("ph"));
 				System.out.println(aa.getInt("pw"));
 				System.out.println(aa.getInt("jumin"));
+				
+				s1 = aa.getString("id");
 			}
 			aa.close();
 		} catch (Exception e) {
@@ -187,8 +207,29 @@ public class UserDAO {
 			Close();
 		}
 	}
+	String s1;
+	String s2;
+	String Out4(String s) {
+		try {
+			DbConnect();
 
-	// 전체 출력
+			state = conn.createStatement(); // state 연결
+			String input = String.format("select * from userpro where id = '%s';", s); // 출력 테이블 대입
+			ResultSet aa = state.executeQuery(input);
+			
+			if (aa.next()) {
+				s1 = aa.getString("id");
+				s2 = aa.getString("pw");
+			}
+			aa.close();
+		} catch (Exception e) {
+		} finally {
+			Close();
+		}
+		return s1;
+	}
+
+// 전체 출력
 	void print() {
 		Db();
 		for (UserDTO s : a) {
@@ -203,7 +244,7 @@ public class UserDAO {
 		}
 	}
 
-	// 회원삭제
+// 회원삭제
 	void remove() {
 
 		Scanner sc = new Scanner(System.in);
@@ -224,7 +265,7 @@ public class UserDAO {
 		}
 	}
 
-	// 메뉴를 위한 메소드
+// 메뉴를 위한 메소드
 	void menu() {
 		System.out.println("회원가입 프로그램");
 		int menu = 0;
@@ -253,5 +294,4 @@ public class UserDAO {
 			}
 		} while (menu != 6);
 	}
-
 }
