@@ -1,2 +1,2 @@
-### JAVA Swing practice
+### JAVA Swing Login & DB connect Test
 
